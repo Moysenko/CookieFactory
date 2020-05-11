@@ -3,10 +3,12 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
+from selenium.webdriver.chrome.options import Options
 import os
 import time
 import random
 import glob
+from pyvirtualdisplay import Display
 
 cur_dir = os.path.dirname(os.path.abspath(__file__))
 driver = None
@@ -14,12 +16,23 @@ driver = None
 
 def _open_site():
     global driver
+    '''
     chrome_options = webdriver.ChromeOptions()
     preference = {'download.default_directory': os.path.join(cur_dir, 'output_saves'),
                   "safebrowsing.enabled": "false"}
     chrome_options.add_experimental_option('prefs', preference)
     chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
+    '''
+    options = Options()
+    options.add_argument("--headless")
+    options.add_argument("--window-size=1920,1080")
+    options.add_experimental_option("excludeSwitches", ["enable-automation"])
+    options.add_experimental_option('useAutomationExtension', False)
+    driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
+    print ("Headless Chrome Initialized")
+    params = {'behavior': 'allow', 'downloadPath': cur_dir + '/output_saves'}
+    driver.execute_cdp_cmd('Page.setDownloadBehavior', params)
 
     driver.get('https://orteil.dashnet.org/cookieclicker/')
 
@@ -105,13 +118,22 @@ def _save():
     for f in glob.glob(os.path.join(output_saves_dir, '*')):
         os.remove(f)
 
-    _open_options()
+    while True:
+        try:
+            print('try to save')
+            _open_options()
+            print('opinons opened')
+            save_to_file = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.LINK_TEXT, 'Save to file')))
+            print('save to file button opened')
+            save_to_file.click()
+            print('save to file button clicked')
+            break
+        except Exception as e:
+            print(e)
+            pass
 
-    save_to_file = WebDriverWait(driver, 40).until(
-        EC.presence_of_element_located((By.LINK_TEXT, 'Save to file')))
-    save_to_file.click()
-
-    while not os.listdir(output_saves_dir):
+    while not glob.glob(output_saves_dir + '/*.txt'):
         time.sleep(1)
 
     driver.quit()
@@ -138,7 +160,13 @@ def _open_save():
     save_to_file_button.send_keys(save_file)
 
 
+def _set_up_display():
+    display = Display(visible=0, size=(800, 600))
+    display.start()
+
+
 def main():
+    #_set_up_display()
     _open_site()
     _open_save()
     farm_time = _get_farm_time()
