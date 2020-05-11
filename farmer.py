@@ -12,13 +12,18 @@ cur_dir = os.path.dirname(os.path.abspath(__file__))
 driver = None
 
 
+def _is_without_interface():
+    return input('Use interface? (y/n)\n').lower() != 'y'
+
+
 def _open_site():
     global driver
     chrome_options = webdriver.ChromeOptions()
     preference = {'download.default_directory': os.path.join(cur_dir, 'output_saves'),
                   "safebrowsing.enabled": "false"}
     chrome_options.add_experimental_option('prefs', preference)
-    chrome_options.add_argument("--headless")
+    if _is_without_interface():
+        chrome_options.add_argument("--headless")
     driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
 
     driver.get('https://orteil.dashnet.org/cookieclicker/')
@@ -107,9 +112,14 @@ def _save():
 
     _open_options()
 
-    save_to_file = WebDriverWait(driver, 40).until(
-        EC.presence_of_element_located((By.LINK_TEXT, 'Save to file')))
-    save_to_file.click()
+    while True:
+        try:
+            save_to_file = WebDriverWait(driver, 40).until(
+                EC.element_to_be_clickable((By.LINK_TEXT, 'Save to file')))
+            save_to_file.click()
+            break
+        except:
+            pass
 
     while not os.listdir(output_saves_dir):
         time.sleep(1)
@@ -118,11 +128,11 @@ def _save():
 
 
 def _get_farm_time():
-    return int(input('Time in seconds to farm: '))
+    return int(input('Time in seconds to farm:\n'))
 
 
 def _get_save_name():
-    return input('Name of file in input_saves with save: ')
+    return input('Name of file in input_saves with save:\n')
 
 
 def _open_save():
@@ -140,7 +150,7 @@ def _open_save():
 
 def main():
     _open_site()
-    _open_save()
+    #_open_save()
     farm_time = _get_farm_time()
     _farm(farm_time)
     _save()
