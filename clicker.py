@@ -70,7 +70,7 @@ def farm(driver, farm_time):
     time_end = time.time() + farm_time
     next_refresh = 100
     while time.time() < time_end:
-        driver.execute_script('arguments[0].click();}', big_cookie)
+        driver.execute_script('arguments[0].click();', big_cookie)
         next_refresh -= 1
         if next_refresh <= 0:
             refresh_info(driver)

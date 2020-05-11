@@ -1,0 +1,29 @@
+<html>
+    <head>
+        <title>Cookie Factory</title>
+    </head>
+
+    <style>
+    .content {
+        margin: auto;
+        width: 50%;
+        border: 3px solid green;
+        padding: 10px;
+    }
+    </style>
+
+    <body>
+        <div class="content">
+
+        <p><b> Чай с печеньками!</b> </p>
+
+        <form action="/upload_save_file" method="POST" enctype=multipart/form-data>
+            Время, на которое вы отдаете нам ваши печеньки:
+            <input type="text" name="time"><br>
+            <input type="file" name="userSave"><br>
+            <input type="submit" value="Ввести печеньки"><br>
+        </form>
+
+        </div>
+    </body>
+</html>

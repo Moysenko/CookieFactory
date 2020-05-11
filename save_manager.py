@@ -21,11 +21,7 @@ def _get_save_name():
     return input('Name of file in input_saves with save:\n')
 
 
-def load_from_save_file(driver):
-    save_name = _get_save_name()
-    if not save_name:
-        return
-
+def load_from_save_file(driver, save_name):
     _open_options(driver)
 
     save_to_file_button = WebDriverWait(driver, 20).until(
@@ -56,5 +52,7 @@ def download_save_file(driver):
 
     while not glob.glob(output_saves_dir + '/*.txt'):
         time.sleep(1)
+
+    os.rename(glob.glob(output_saves_dir + '/*.txt')[0], output_saves_dir + '/save.txt')
 
     print('Download finished!')
