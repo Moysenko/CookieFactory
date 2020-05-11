@@ -16,7 +16,7 @@ def _list_numerated_elements_by_id(driver, name):
         try:
             elements.append(driver.find_element_by_id('{0}{1}'.format(name, ind)))
             ind += 1
-        except:
+        except Exception:
             break
     return elements
 
@@ -33,14 +33,14 @@ def click_ups(driver):
             for ind in range(last_bad_product, -1, -1):
                 try:
                     products[ind].click()
-                except:
+                except Exception:
                     last_bad_product = ind
                     continue
         else:
             for ind in range(last_bad_upgrade, -1, -1):
                 try:
                     upgrades[ind].click()
-                except:
+                except Exception:
                     last_bad_upgrade = ind
                     continue
 
@@ -64,7 +64,7 @@ def farm(driver, farm_time):
                 EC.element_to_be_clickable((By.ID, 'bigCookie')))
             big_cookie.click()
             break
-        except:
+        except Exception:
             pass
 
     time_end = time.time() + farm_time

@@ -13,7 +13,7 @@ def _open_options(driver):
                 EC.element_to_be_clickable((By.ID, 'prefsButton')))
             options.click()
             break
-        except:
+        except Exception:
             pass
 
 
@@ -46,7 +46,7 @@ def download_save_file(driver):
             save_to_file.click()
             print('Download started...')
             break
-        except Exception as e:
+        except Exception:
             print('Failed\n')
             pass
 

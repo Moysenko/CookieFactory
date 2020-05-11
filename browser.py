@@ -12,7 +12,7 @@ class Site:
         options.add_experimental_option("excludeSwitches", ["enable-automation"])
         options.add_experimental_option('useAutomationExtension', False)
         self.driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=options)
-        print ("Headless Chrome Initialized")
+        print("Headless Chrome Initialized")
         params = {'behavior': 'allow', 'downloadPath': os.path.dirname(os.path.abspath(__file__)) + '/output_saves'}
         self.driver.execute_cdp_cmd('Page.setDownloadBehavior', params)
         self.driver.get('https://orteil.dashnet.org/cookieclicker/')
