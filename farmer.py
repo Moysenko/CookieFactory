@@ -16,16 +16,31 @@ def _is_without_interface():
     return input('Use interface? (y/n)\n').lower() != 'y'
 
 
+def enable_download_headless(browser, download_dir):
+    browser.command_executor._commands["send_command"] = ("POST", '/session/$sessionId/chromium/send_command')
+    params = {'cmd':'Page.setDownloadBehavior', 'params': {'behavior': 'allow', 'downloadPath': download_dir}}
+    browser.execute("send_command", params)
+
+
 def _open_site():
     global driver
     chrome_options = webdriver.ChromeOptions()
     preference = {'download.default_directory': os.path.join(cur_dir, 'output_saves'),
-                  "safebrowsing.enabled": "false"}
+                  "download.prompt_for_download": False,
+                  "download.directory_upgrade": True,
+                  "safebrowsing_for_trusted_sources_enabled": False,
+                  "safebrowsing.enabled": False}
     chrome_options.add_experimental_option('prefs', preference)
     if _is_without_interface():
+        chrome_options.add_argument("--disable-notifications")
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('--verbose')
+        chrome_options.add_argument('--disable-gpu')
+        chrome_options.add_argument('--disable-software-rasterizer')
         chrome_options.add_argument("--headless")
-    driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
 
+    driver = webdriver.Chrome(ChromeDriverManager().install(), chrome_options=chrome_options)
+    enable_download_headless(driver, os.path.join(cur_dir, 'output_saves'))
     driver.get('https://orteil.dashnet.org/cookieclicker/')
 
 
@@ -106,22 +121,20 @@ def _open_options():
 
 
 def _save():
-    output_saves_dir = os.path.join(cur_dir, 'output_saves')
-    for f in glob.glob(os.path.join(output_saves_dir, '*')):
-        os.remove(f)
-
-    _open_options()
-
     while True:
         try:
-            save_to_file = WebDriverWait(driver, 40).until(
-                EC.element_to_be_clickable((By.LINK_TEXT, 'Save to file')))
-            save_to_file.click()
+            options = WebDriverWait(driver, 20).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="prefsButton"]')))
+            options.click()
             break
         except:
             pass
 
-    while not os.listdir(output_saves_dir):
+    save_to_file = WebDriverWait(driver, 20).until(
+        EC.presence_of_element_located((By.XPATH, '//*[@id="menu"]/div[3]/div[4]/a[1]')))
+    save_to_file.click()
+
+    while len(os.listdir(cur_dir + '/output_saves')) == 0:
         time.sleep(1)
 
     driver.quit()
