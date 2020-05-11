@@ -1,7 +1,7 @@
 # CookieFactory
 Autoclicker for famous [cookie-clicker](https://orteil.dashnet.org/cookieclicker/)
 
-To run cookie-clicker, simply type-in this in your console:
+To run autoclicker, simply type-in this in your console:
 ```shell
 $ python3 app.py
 ```
