@@ -45,9 +45,16 @@ def click_ups(driver):
                     continue
 
 
+def _print_border():
+    print('-' * 20)
+
+
 def refresh_info(driver):
+    _print_border()
+    print_stats(driver)
     click_ups(driver)
     print_stats(driver)
+    _print_border()
 
 
 def farm(driver, farm_time):
@@ -63,8 +70,8 @@ def farm(driver, farm_time):
     time_end = time.time() + farm_time
     next_refresh = 100
     while time.time() < time_end:
-        big_cookie.click()
+        driver.execute_script('arguments[0].click();}', big_cookie)
         next_refresh -= 1
         if next_refresh <= 0:
             refresh_info(driver)
-            next_refresh = random.choice([i * 100 for i in range(1, 5)])
+            next_refresh = random.choice([i * 100 for i in range(3, 9)])
