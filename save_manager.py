@@ -6,8 +6,8 @@ import time
 import glob
 
 
-def _open_options(driver):
-    while True:
+def _open_options(driver, attempts=10):
+    for _ in range(attempts):
         try:
             options = WebDriverWait(driver, 20).until(
                 EC.element_to_be_clickable((By.ID, 'prefsButton')))
@@ -30,12 +30,12 @@ def load_from_save_file(driver, save_name):
     save_to_file_button.send_keys(save_file)
 
 
-def download_save_file(driver):
+def download_save_file(driver, download_attempts=10):
     output_saves_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'output_saves')
     for f in glob.glob(os.path.join(output_saves_dir, '*')):
         os.remove(f)
 
-    while True:
+    for _ in range(download_attempts):
         try:
             print('Trying to save...')
             _open_options(driver)

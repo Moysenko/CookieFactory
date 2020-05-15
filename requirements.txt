@@ -1,0 +1,5 @@
+selenium
+flask
+webdriver_manager
+timeout-decorator
+unittest

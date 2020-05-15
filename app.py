@@ -1,5 +1,4 @@
-from flask import Flask, render_template, send_file, request, send_from_directory
-from werkzeug.utils import secure_filename
+from flask import Flask, render_template, request, send_from_directory
 import logging
 import os
 import factory
@@ -13,7 +12,6 @@ logger.setLevel('INFO')
 
 @app.route('/', methods=['GET'])
 def get():
-    print('hehe')
     return render_template('index.html')
 
 
