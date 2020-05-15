@@ -101,7 +101,7 @@ class TestClicker(unittest.TestCase):
 class TestClickerAndSaveManager(unittest.TestCase):
 
     @timeout_decorator.timeout(120)
-    def test_loadin_working(self):
+    def test_loading_is_working(self):
         with browser.CookieClickerSite() as site:
             try:
                 clicker.farm(site.driver, 10)

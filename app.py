@@ -19,8 +19,9 @@ def get():
 def upload_save_file():
     time = request.form['time']
     file = request.files['userSave']
+    browser = request.form.get('browser')
     file.save(os.path.join(os.path.dirname(os.path.abspath(__file__)), 'input_saves', file.filename))
-    factory.mine(time, file.filename)
+    factory.mine(time, file.filename, str(browser))
     return send_from_directory(os.path.join(app.root_path, 'output_saves'), 'save.txt')
 
 

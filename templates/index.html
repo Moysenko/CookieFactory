@@ -15,12 +15,20 @@
     <body>
         <div class="content">
 
-        <p><b> Чай с печеньками!</b> </p>
+        <p><b> Пай с чеченьками!</b> </p>
 
         <form action="/upload_save_file" method="POST" enctype=multipart/form-data>
             Время, на которое вы отдаете нам ваши печеньки:
             <input type="text" name="time"><br>
-            <input type="file" name="userSave"><br>
+            <label for="file">Выберите файл с сохранением:</label>
+            <input id="file" type="file" name="userSave"><br>
+            <label for="browser">Выберите браузер, который мы должны использовать
+                (Headless Chrome самый быстрый):</label>
+            <select id="browser" name="browser">
+                <option value="Chrome">Chrome</option>
+                <option value="Headless Chrome">Headless Chrome</option>
+                <option value="Firefox">Firefox</option>
+            </select><br>
             <input type="submit" value="Ввести печеньки"><br>
         </form>
 
