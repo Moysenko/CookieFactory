@@ -1,7 +1,15 @@
 # CookieFactory
 Autoclicker for famous [cookie-clicker](https://orteil.dashnet.org/cookieclicker/)
 
-To run autoclicker, simply type-in this in your console:
+## How can I try it?
+
+Install requirements:
+
+```shell
+pip3 install -r requirements.txt
+```
+
+Run CookieFactory locally:
 ```shell
 $ python3 app.py
 ```
